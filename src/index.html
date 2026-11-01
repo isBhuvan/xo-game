@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="description" content="Two-player Tic-Tac-Toe (XO) for desktop and mobile." />
+    <meta name="theme-color" content="#4f46e5" />
+    <title>Tic-Tac-Toe</title>
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600&display=swap"
+    />
+    <link rel="stylesheet" href="css/style.css" />
+    <script>
+      // Apply a saved theme before first paint to avoid a flash.
+      try {
+        var t = localStorage.getItem('xo-theme');
+        if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+      } catch (e) {}
+    </script>
+    <script type="module" src="js/dom.js"></script>
+  </head>
+  <body>
+    <main class="app">
+      <header class="app-header">
+        <h1>Tic-Tac-Toe</h1>
+        <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Switch theme"></button>
+      </header>
+
+      <dl class="scoreboard" aria-label="Scoreboard">
+        <div><dt>Player X</dt><dd id="score-x">0</dd></div>
+        <div><dt>Draws</dt><dd id="score-draws">0</dd></div>
+        <div><dt>Player O</dt><dd id="score-o">0</dd></div>
+      </dl>
+
+      <div class="series">
+        <label for="max-games">Games in series</label>
+        <select id="max-games">
+          <option value="1">1</option>
+          <option value="3" selected>3</option>
+          <option value="5">5</option>
+          <option value="7">7</option>
+          <option value="10">10</option>
+        </select>
+        <span id="game-count" class="series__count" aria-live="polite"></span>
+      </div>
+
+      <p id="status" class="status" role="status" aria-live="polite"></p>
+
+      <div id="board" class="board" role="group" aria-label="Tic-Tac-Toe board"></div>
+
+      <div class="actions">
+        <button id="reset" class="reset" type="button">New game</button>
+        <button id="new-series" class="reset reset--secondary" type="button">New series</button>
+      </div>
+    </main>
+
+    <dialog id="series-dialog" class="dialog" aria-labelledby="series-title" aria-describedby="series-summary">
+      <div class="dialog__card">
+        <div id="trophy" class="trophy" hidden>
+          <svg viewBox="0 0 64 64" role="img" aria-label="Winner's trophy">
+            <path d="M16 12H8v6c0 8 5 13 12 14M48 12h8v6c0 8-5 13-12 14" fill="none" stroke="#f59e0b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M16 8h32v14c0 10-7 18-16 18S16 32 16 22z" fill="#fbbf24" />
+            <path d="M21 12h5v10c0 5 2 9 5 11-6-2-10-8-10-14z" fill="#fde68a" opacity="0.8" />
+            <rect x="28" y="40" width="8" height="8" fill="#f59e0b" />
+            <rect x="20" y="48" width="24" height="8" rx="2" fill="#d97706" />
+            <text id="trophy-mark" x="33" y="29" text-anchor="middle" font-size="16" font-weight="700" fill="#92400e"></text>
+          </svg>
+        </div>
+        <h2 id="series-title" class="dialog__title"></h2>
+        <p id="series-summary" class="dialog__summary"></p>
+        <button id="play-again" class="reset" type="button">Play again</button>
+      </div>
+    </dialog>
+
+    <noscript>This game requires JavaScript.</noscript>
+  </body>
+</html>
