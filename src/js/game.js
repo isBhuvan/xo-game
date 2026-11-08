@@ -25,14 +25,18 @@ export class Game {
   #starter;
 
   constructor() {
-    // reset() flips the starter, so seed with O to make X open the first game.
-    this.#starter = PLAYERS.O;
+    this.#starter = PLAYERS.X;
     this.reset();
   }
 
-  /** Restore the initial state. The opening player alternates every game. */
+  /**
+   * Restore the initial state. The opening player alternates only after a
+   * finished game; resetting mid-game keeps the same opener.
+   */
   reset() {
-    this.#starter = this.#starter === PLAYERS.X ? PLAYERS.O : PLAYERS.X;
+    if (this.#status !== undefined && this.#status !== STATUS.PLAYING) {
+      this.#starter = this.#starter === PLAYERS.X ? PLAYERS.O : PLAYERS.X;
+    }
     this.#board = Array(9).fill(null);
     this.#current = this.#starter;
     this.#status = STATUS.PLAYING;
