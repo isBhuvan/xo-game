@@ -43,13 +43,18 @@ test('detects a draw', () => {
   assert.equal(s.winner, null);
 });
 
-test('reset clears the board and alternates the opening player', () => {
+test('reset mid-game clears the board and keeps the opening player', () => {
   const g = new Game();
   g.makeMove(0);
   g.reset();
   const s = g.getState();
   assert.equal(s.board.every((c) => c === null), true);
-  assert.equal(s.currentPlayer, 'O');
+  assert.equal(s.currentPlayer, 'X');
+});
+
+test('reset after a finished game alternates the opening player', () => {
+  const g = new Game();
+  [0, 3, 1, 4, 2].forEach((i) => g.makeMove(i)); // X wins
   g.reset();
-  assert.equal(g.getState().currentPlayer, 'X');
+  assert.equal(g.getState().currentPlayer, 'O');
 });
