@@ -262,6 +262,40 @@ h1 {
   animation: win-pulse 0.8s var(--ease) 2;
 }
 
+/* Exit animation: hold the result, then fade the board out just before the
+   next game starts. Duration must match NEXT_GAME_DELAY in dom.js. */
+.board {
+  --next-game-delay: 5s;
+}
+
+.board[data-ending] {
+  animation: board-exit var(--next-game-delay) linear forwards;
+}
+
+.board[data-ending='draw'] .cell {
+  animation: draw-shake 0.5s var(--ease);
+  opacity: 0.75;
+}
+
+@keyframes board-exit {
+  0%, 60% { opacity: 1; transform: scale(1); }
+  100%    { opacity: 0; transform: scale(0.96); }
+}
+
+/* Opacity-only variant: a gentle fade is still fine for reduced motion. */
+@keyframes board-fade {
+  0%, 60% { opacity: 1; }
+  100%    { opacity: 0; }
+}
+
+@keyframes draw-shake {
+  0%, 100% { transform: translateX(0); }
+  20%      { transform: translateX(-6px); }
+  40%      { transform: translateX(6px); }
+  60%      { transform: translateX(-4px); }
+  80%      { transform: translateX(4px); }
+}
+
 @keyframes win-pulse {
   0%, 100% { transform: scale(1); }
   50%      { transform: scale(1.08); }
@@ -327,6 +361,10 @@ h1 {
   *, *::before, *::after {
     animation: none !important;
     transition: none !important;
+  }
+
+  .board[data-ending] {
+    animation: board-fade var(--next-game-delay) linear forwards !important;
   }
 }
 

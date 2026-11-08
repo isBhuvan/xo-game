@@ -141,6 +141,24 @@ function celebrateSeries() {
 // ---------- Series flow ----------
 
 let seriesEndTimer = null;
+let nextGameTimer = null;
+const NEXT_GAME_DELAY = 5000; // keep in sync with --next-game-delay in the CSS
+
+function cancelNextGame() {
+  clearTimeout(nextGameTimer);
+  delete boardEl.dataset.ending;
+}
+
+/** After a win or draw, play the exit animation and start the next game. */
+function scheduleNextGame() {
+  boardEl.dataset.ending = game.getState().status;
+  nextGameTimer = setTimeout(() => {
+    cancelNextGame();
+    clearConfetti();
+    game.reset();
+    render(game.getState());
+  }, NEXT_GAME_DELAY);
+}
 
 function showSeriesResult() {
   const s = series.getState();
@@ -163,6 +181,7 @@ function showSeriesResult() {
 
 function startSeries() {
   clearTimeout(seriesEndTimer);
+  cancelNextGame();
   clearConfetti();
   if (dialog.open) dialog.close();
   series.reset();
@@ -191,6 +210,8 @@ boardEl.addEventListener('click', (event) => {
   if (series.getState().complete) {
     // Let the final game's win play out before the series result appears.
     seriesEndTimer = setTimeout(showSeriesResult, 1400);
+  } else {
+    scheduleNextGame();
   }
 });
 
@@ -232,6 +253,7 @@ resetBtn.addEventListener('click', () => {
     return;
   }
   clearConfetti();
+  cancelNextGame();
   game.reset();
   render(game.getState());
 });
